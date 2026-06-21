@@ -448,12 +448,12 @@ function autoCorrelate(buf,sampleRate){
   const SIZE=buf.length;let rms=0;
   for(let i=0;i<SIZE;i++)rms+=buf[i]*buf[i];
   rms=Math.sqrt(rms/SIZE);
-  if(rms<0.01)return -1;
-  let r1=0,r2=SIZE-1;const thres=0.2;
+  if(rms<0.001)return -1;
+  let r1=0,r2=SIZE-1;const thres=0.1;
   for(let i=0;i<SIZE/2;i++){if(Math.abs(buf[i])<thres){r1=i;break;}}
   for(let i=1;i<SIZE/2;i++){if(Math.abs(buf[SIZE-i])<thres){r2=SIZE-i;break;}}
   const b=buf.slice(r1,r2);const n=b.length;
-  if(n<32)return -1;
+  if(n<16)return -1;
   const c=new Array(n).fill(0);
   for(let i=0;i<n;i++)for(let j=0;j<n-i;j++)c[i]+=b[j]*b[j+i];
   let d=0;while(d<n-1&&c[d]>c[d+1])d++;
@@ -466,7 +466,7 @@ function autoCorrelate(buf,sampleRate){
   if(a)T0=T0-bb/(2*a);
   if(T0<=0)return -1;
   const freq=sampleRate/T0;
-  if(freq<70||freq>1200)return -1;
+  if(freq<50||freq>1400)return -1;
   return freq;
 }
 function nearestSwara(freq){
