@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Ragam Practice — NZCMS Stage 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#16332f; --green-2:#0f2421; --green-3:#0b1a18;
+    --ivory:#fbf6ec; --ivory-line:#e7dcc6;
+    --kumkum:#9e2b25; --kumkum-soft:#c1453c;
+    --gold:#b8862b; --gold-soft:#d8a94a;
+    --teal:#1f6f6b; --teal-soft:#2f9690;
+    --ink:#27201a; --ink-soft:#6a5f50;
+    --cream:#f2e8d4;
+    --good:#2f8f5b; --bad:#b4463e; --near:#c08a2b;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--green);color:var(--cream);
+    font-family:"Spectral",Georgia,serif;font-size:17px;line-height:1.5;
+    -webkit-font-smoothing:antialiased;min-height:100vh;
+  }
+  .mono{font-family:"Spline Sans Mono",monospace;}
+  .wrap{max-width:760px;margin:0 auto;padding:0 16px 120px;}
+
+  /* top bar */
+  header.bar{
+    position:sticky;top:0;z-index:30;
+    background:linear-gradient(180deg,var(--green-2),rgba(15,36,33,.96));
+    border-bottom:1px solid rgba(216,169,74,.28);
+    backdrop-filter:blur(6px);
+  }
+  .bar-in{max-width:760px;margin:0 auto;padding:12px 16px 0;}
+  .brand{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+  .brand .t{font-family:"Marcellus",serif;font-size:1.18rem;color:var(--gold-soft);letter-spacing:.02em;}
+  .brand .who{font-family:"Spline Sans Mono",monospace;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:#9fb3a8;}
+  nav.tabs{display:flex;gap:4px;margin-top:10px;}
+  nav.tabs button{
+    flex:1;background:none;border:none;cursor:pointer;
+    font-family:"Spline Sans Mono",monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+    color:#9fb3a8;padding:10px 4px;border-bottom:2px solid transparent;transition:.2s;
+  }
+  nav.tabs button.on{color:var(--gold-soft);border-bottom-color:var(--gold);}
+
+  /* sound toggle */
+  .sound-pill{
+    position:fixed;right:14px;bottom:14px;z-index:40;
+    background:var(--green-2);border:1px solid var(--gold);color:var(--gold-soft);
+    font-family:"Spline Sans Mono",monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
+    padding:9px 13px;border-radius:999px;cursor:pointer;box-shadow:0 8px 24px -10px #000;
+  }
+  .sound-pill.on{background:var(--gold);color:#3a2a08;border-color:var(--gold-soft);}
+
+  h2.view-h{font-family:"Marcellus",serif;font-weight:400;font-size:1.7rem;color:var(--cream);margin:26px 0 4px;}
+  p.view-s{color:#bcae97;font-style:italic;margin:0 0 18px;font-size:.98rem;}
+
+  .grid{display:grid;gap:12px;}
+  .menu-card{
+    display:flex;gap:14px;align-items:center;text-align:left;
+    background:var(--green-2);border:1px solid rgba(216,169,74,.2);border-radius:14px;
+    padding:16px 18px;cursor:pointer;color:var(--cream);transition:.18s;width:100%;font-family:inherit;
+  }
+  .menu-card:hover{border-color:var(--gold);transform:translateY(-1px);}
+  .menu-card .mi{font-size:1.5rem;width:1.6em;text-align:center;color:var(--gold-soft);flex-shrink:0;}
+  .menu-card .mt{font-family:"Marcellus",serif;font-size:1.18rem;color:var(--gold-soft);}
+  .menu-card .md{font-size:.9rem;color:#bcae97;margin-top:1px;}
+
+  /* generic panel on ivory */
+  .panel{background:var(--ivory);color:var(--ink);border-radius:16px;padding:20px;margin:14px 0;border:1px solid var(--ivory-line);}
+  .panel .lbl{font-family:"Spline Sans Mono",monospace;font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:6px;}
+
+  /* learn cards */
+  .lcard{background:var(--ivory);color:var(--ink);border-radius:14px;margin:12px 0;border:1px solid var(--ivory-line);overflow:hidden;}
+  .lhead{display:flex;gap:12px;align-items:flex-start;padding:16px 18px 12px;border-bottom:2px solid var(--ivory-line);}
+  .lhead .idx{font-family:"Marcellus",serif;font-size:1.7rem;color:var(--gold);line-height:1;}
+  .lhead h3{font-family:"Marcellus",serif;font-weight:400;font-size:1.5rem;margin:0;color:var(--kumkum);}
+  .lhead .lin{font-size:.86rem;color:var(--ink-soft);}
+  .lhead .pill{font-family:"Spline Sans Mono",monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap;font-weight:500;}
+  .pill.parent{background:var(--gold);color:#3a2a08;}
+  .pill.child{background:#eadfca;color:#6a5326;border:1px solid #d8c69e;}
+  .scales2{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--ivory-line);}
+  .sc{padding:13px 18px;}
+  .sc:first-child{border-right:1px solid var(--ivory-line);}
+  .sc .l{font-family:"Spline Sans Mono",monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:5px;}
+  .sw{font-family:"Spline Sans Mono",monospace;font-size:1.08rem;font-weight:500;}
+  .sw sub{font-size:.62em;color:var(--kumkum);font-weight:600;}
+  .lfacts{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;padding:14px 18px;border-bottom:1px solid var(--ivory-line);}
+  .lfacts .k{font-family:"Spline Sans Mono",monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);}
+  .lfacts .v{font-size:.92rem;}
+  .lsim{padding:14px 18px 18px;}
+  .lsim .sl{font-family:"Spline Sans Mono",monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+  .lsim table{width:100%;border-collapse:collapse;}
+  .lsim td{padding:8px 0;border-top:1px solid var(--ivory-line);vertical-align:top;font-size:.9rem;}
+  .lsim tr:first-child td{border-top:none;}
+  .lsim td.r{width:36%;font-family:"Marcellus",serif;font-size:1rem;color:var(--teal);padding-right:12px;}
+  .lsim td.r small{display:block;font-family:"Spectral";font-style:italic;font-size:.72rem;color:var(--ink-soft);}
+  .lsim b{color:var(--kumkum);}
+  .play-mini{background:var(--teal);color:#fff;border:none;border-radius:8px;font-family:"Spline Sans Mono",monospace;font-size:.66rem;letter-spacing:.08em;padding:7px 12px;cursor:pointer;margin-top:8px;}
+  .play-mini:active{transform:scale(.97);}
+
+  /* trainer */
+  .pickwrap{display:flex;flex-wrap:wrap;gap:7px;margin:6px 0 4px;}
+  .pickwrap button{font-family:"Spline Sans Mono",monospace;font-size:.74rem;background:var(--green-2);color:var(--cream);border:1px solid rgba(216,169,74,.25);border-radius:9px;padding:8px 11px;cursor:pointer;}
+  .pickwrap button.on{background:var(--gold);color:#3a2a08;border-color:var(--gold);}
+  .ctrlrow{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin:8px 0;}
+  .ctrlrow label{font-family:"Spline Sans Mono",monospace;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  input[type=range]{accent-color:var(--kumkum);}
+  select{font-family:"Spline Sans Mono",monospace;padding:6px 8px;border-radius:8px;border:1px solid var(--ivory-line);background:#fff;color:var(--ink);}
+  .bigbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+  .btn{font-family:"Spline Sans Mono",monospace;font-size:.78rem;letter-spacing:.06em;border:none;border-radius:10px;padding:12px 16px;cursor:pointer;}
+  .btn.primary{background:var(--kumkum);color:#fff;}
+  .btn.gold{background:var(--gold);color:#3a2a08;}
+  .btn.teal{background:var(--teal);color:#fff;}
+  .btn.ghost{background:transparent;border:1px solid var(--ivory-line);color:var(--ink);}
+  .btn:active{transform:scale(.98);}
+  .toggle{display:inline-flex;align-items:center;gap:7px;cursor:pointer;user-select:none;font-size:.9rem;color:var(--ink);}
+  .now-playing{margin-top:14px;font-family:"Spline Sans Mono",monospace;font-size:1.35rem;text-align:center;letter-spacing:.05em;min-height:1.6em;color:var(--kumkum);}
+  .seqline{text-align:center;font-family:"Spline Sans Mono",monospace;font-size:1.05rem;color:var(--ink-soft);margin-top:4px;}
+  .seqline .cur{color:var(--kumkum);font-weight:600;font-size:1.25em;}
+
+  /* quiz */
+  .q-meta{display:flex;justify-content:space-between;font-family:"Spline Sans Mono",monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:#9fb3a8;margin:18px 0 8px;}
+  .q-card{background:var(--ivory);color:var(--ink);border-radius:16px;padding:22px 20px;border:1px solid var(--ivory-line);}
+  .q-prompt{font-family:"Marcellus",serif;font-size:1.3rem;color:var(--kumkum);line-height:1.3;margin-bottom:6px;}
+  .q-sub{font-size:.92rem;color:var(--ink-soft);margin-bottom:14px;}
+  .opts{display:grid;gap:9px;}
+  .opt{font-family:"Spectral";font-size:1.02rem;text-align:left;background:#fff;border:1.5px solid var(--ivory-line);border-radius:11px;padding:13px 15px;cursor:pointer;color:var(--ink);transition:.12s;}
+  .opt:hover{border-color:var(--teal);}
+  .opt.correct{background:#e7f3ea;border-color:var(--good);color:#1f5a39;}
+  .opt.wrong{background:#f7e6e4;border-color:var(--bad);color:#7e2a24;}
+  .opt.muted{opacity:.55;}
+  .opt b{color:var(--kumkum);}
+  .feedback{margin-top:14px;font-size:.96rem;padding:12px 14px;border-radius:10px;display:none;}
+  .feedback.show{display:block;}
+  .feedback.ok{background:#e7f3ea;color:#1f5a39;}
+  .feedback.no{background:#f7e6e4;color:#7e2a24;}
+  .selfrate{display:flex;gap:8px;margin-top:14px;}
+  .selfrate button{flex:1;font-family:"Spline Sans Mono",monospace;font-size:.74rem;border:none;border-radius:10px;padding:12px 6px;cursor:pointer;color:#fff;}
+  .sr-got{background:var(--good);} .sr-near{background:var(--near);} .sr-miss{background:var(--bad);}
+  .reveal{margin-top:14px;padding:14px;background:#f3ebda;border-radius:10px;display:none;}
+  .reveal.show{display:block;}
+  .reveal .sw{font-size:1.15rem;}
+
+  /* scale builder */
+  .build-target{font-family:"Spline Sans Mono",monospace;font-size:1.3rem;text-align:center;min-height:1.7em;letter-spacing:.06em;color:var(--kumkum);margin:6px 0 12px;padding:10px;background:#fff;border:1.5px dashed var(--ivory-line);border-radius:11px;}
+  .build-target .ph{color:#c9bca3;}
+  .tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  .tile{font-family:"Spline Sans Mono",monospace;font-size:1.1rem;background:var(--green-2);color:var(--cream);border:1px solid rgba(216,169,74,.3);border-radius:10px;padding:11px 15px;cursor:pointer;min-width:48px;}
+  .tile:active{transform:scale(.95);}
+  .tile.used{opacity:.3;pointer-events:none;}
+
+  /* report */
+  .report-big{font-family:"Marcellus",serif;font-size:3rem;color:var(--gold-soft);text-align:center;}
+  .dotgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:14px;}
+  .dotrow{display:flex;align-items:center;gap:8px;font-size:.88rem;}
+  .dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;}
+  .progbar{height:7px;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:4px;}
+  .progbar i{display:block;height:100%;background:var(--gold);}
+
+  .back{background:none;border:none;color:var(--gold-soft);font-family:"Spline Sans Mono",monospace;font-size:.72rem;letter-spacing:.1em;cursor:pointer;padding:14px 0 4px;}
+  .center{text-align:center;}
+  .small{font-size:.85rem;color:#9fb3a8;}
+  footer{color:#8aa097;text-align:center;font-size:.82rem;margin-top:30px;line-height:1.6;}
+  .hide{display:none!important;}
+  .overlay{position:fixed;inset:0;z-index:60;background:rgba(11,26,24,.93);display:flex;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(3px);}
+  .namebox{background:var(--ivory);color:var(--ink);border-radius:18px;padding:28px 24px;max-width:380px;width:100%;text-align:center;border:1px solid var(--gold);box-shadow:0 30px 60px -20px #000;}
+  .namebox .om{font-family:"Marcellus",serif;color:var(--gold);font-size:1.3rem;letter-spacing:.3em;}
+  .namebox h2{font-family:"Marcellus",serif;font-weight:400;color:var(--kumkum);font-size:1.7rem;margin:8px 0 4px;}
+  .namebox p{color:var(--ink-soft);font-size:.95rem;margin:0 0 16px;}
+  .namebox input{width:100%;font-family:"Spectral",serif;font-size:1.15rem;padding:12px 14px;border:1.5px solid var(--ivory-line);border-radius:11px;text-align:center;color:var(--ink);background:#fff;}
+  .namebox input:focus{outline:none;border-color:var(--teal);}
+  .namebox .btn{margin-top:16px;width:100%;justify-content:center;}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand"><span class="t">Ten Ragams</span><span class="who" id="whoLine" style="cursor:pointer" title="Tap to change your name">NZCMS Stage 3</span></div>
+    <nav class="tabs">
+      <button data-tab="learn" class="on">Learn</button>
+      <button data-tab="practice">Practice</button>
+      <button data-tab="mock">Mock Exam</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap"><div id="app"></div>
+  <footer>Sruti is the mother of laya. Breathe, sing the ārohaṇam, then the avarohaṇam.<br><span id="footPhrase">You've got this.</span> ॥ ॐ ॥</footer>
+</div>
+
+<div class="overlay hide" id="nameOverlay">
+  <div class="namebox">
+    <div class="om">॥ ॐ ॥</div>
+    <h2>Welcome</h2>
+    <p>What should we call you?</p>
+    <input id="nameInput" type="text" placeholder="Type your name" autocomplete="off" maxlength="24">
+    <button class="btn gold" id="nameGo">Start practising</button>
+  </div>
+</div>
+
+<button class="sound-pill" id="soundPill">♪ Sound: off</button>
+
+<script>
+"use strict";
+
+/* ============================ DATA ============================ */
+const RATIO = {
+  "S":1, "R1":16/15, "R2":9/8, "R3":6/5, "G2":6/5, "G3":5/4,
+  "M1":4/3, "M2":45/32, "P":3/2, "D1":8/5, "D2":5/3, "D3":16/9,
+  "N2":16/9, "N3":15/8, "S^":2
+};
+const SUBS={"1":"₁","2":"₂","3":"₃"};
+function disp(tok){
+  if(tok==="S")return "S";
+  if(tok==="S^")return "Ṡ";
+  return tok[0]+(SUBS[tok[1]]||"");
+}
+function dispSeq(arr){return arr.map(disp).join(" ");}
+
+const R = [
+ {n:"Saveri",alt:"Sāveri",lin:"Janya of Māyāmāḷavagauḷa · mela 15",isParent:false,mela:15,parentName:"Māyāmāḷavagauḷa",
+  time:"Morning",type:"Audava–Sampūrṇa",
+  aro:["S","R1","M1","P","D1","S^"],ava:["S^","N3","D1","P","M1","G3","R1","S"],
+  song:"“Srī Rājagopāla” — Dikshitar",
+  sim:[["Malahari","child of 15","Remove the niṣādam — <b>drop N₃</b>."],
+       ["Bauli","child of 15","Ascend with gāndhāra — <b>G₃ for M₁</b> (S R₁ G₃ P D₁ S)."],
+       ["Gowla","child of 15","<b>Drop D₁</b>, bring Ni into the ascent."],
+       ["Lalita","child of 15","<b>Remove panchamam (P)</b>."]]},
+ {n:"Bilahari",alt:"",lin:"Janya of Dheeraśaṅkarābharaṇam · mela 29",isParent:false,mela:29,parentName:"Dheeraśaṅkarābharaṇam",
+  time:"Morning",type:"Audava–Sampūrṇa",
+  aro:["S","R2","G3","P","D2","S^"],ava:["S^","N3","D2","P","M1","G3","R2","S"],
+  song:"“Paridānamicchitē” (varnam) — Patnam Subramania Iyer",
+  sim:[["Sankarabharanam","mela 29 · parent","<b>Make the ascent full</b> — add M₁ & N₃ going up."],
+       ["Mohanam","pentatonic","<b>Drop M₁ & N₃</b> in the descent too."],
+       ["Arabhi","child of 29","Ascend with madhyama — <b>M₁ for G₃</b>."],
+       ["Kambhoji","child of 28","<b>Lower Ni (N₃→N₂)</b> and add M₁ in ascent."]]},
+ {n:"Vasanta",alt:"Vasantha",lin:"Janya of Sūryakāntam · mela 17",isParent:false,mela:17,parentName:"Sūryakāntam",
+  time:"Evening",type:"Vakra Audava–Shadava (no Pa)",
+  aro:["S","M1","G3","M1","D2","N3","S^"],ava:["S^","N3","D2","M1","G3","R1","S"],
+  song:"“Sītā Kalyāṇa Vaibhōgamē” — Tyagaraja",
+  sim:[["Lalita","child of 15","<b>Lower D₂→D₁</b> — its identical twin."],
+       ["Suryakantam","mela 17 · parent","<b>Add panchamam (P)</b> and straighten it."],
+       ["Saveri","child of 15","<b>Add P</b> and <b>lower D₂→D₁</b>."],
+       ["Bilahari","child of 29","<b>Add P</b> and <b>raise R₁→R₂</b>."]]},
+ {n:"Hamsadhwani",alt:"Haṃsadhvani",lin:"Janya of Dheeraśaṅkarābharaṇam · mela 29",isParent:false,mela:29,parentName:"Dheeraśaṅkarābharaṇam",
+  time:"Morning",type:"Audava–Audava (pentatonic)",
+  aro:["S","R2","G3","P","N3","S^"],ava:["S^","N3","P","G3","R2","S"],
+  song:"“Vātāpi Gaṇapatim” — Dikshitar",
+  sim:[["Mohanam","pentatonic","Swap Ni for Dha — <b>N₃→D₂</b>."],
+       ["Nalinakanti","child of 29","<b>Add madhyamam (M₁)</b>."],
+       ["Hamsanadam","prati-ma cousin","Gāndhāra → prati-ma — <b>G₃→M₂</b>."],
+       ["Sankarabharanam","mela 29 · parent","<b>Add M₁ and D₂</b> for the full scale."]]},
+ {n:"Kalyani",alt:"Mēchakalyāṇi",lin:"Melakarta (parent) · the 65th",isParent:true,mela:65,parentName:null,
+  time:"Evening",type:"Sampūrṇa–Sampūrṇa (melakarta)",
+  aro:["S","R2","G3","M2","P","D2","N3","S^"],ava:["S^","N3","D2","P","M2","G3","R2","S"],
+  song:"“Nidhi Cāla Sukhamā” — Tyagaraja",
+  sim:[["Sankarabharanam","mela 29","<b>Lower madhyamam (M₂→M₁)</b> — the one difference."],
+       ["Vachaspati","mela 64","<b>Lower niṣādam (N₃→N₂)</b>."],
+       ["Latangi","mela 63","<b>Lower dhaivatam (D₂→D₁)</b>."],
+       ["Mohanakalyani","child of 65","<b>Make the ascent pentatonic</b> (S R₂ G₃ P D₂ S)."]]},
+ {n:"Panthuvarali",alt:"Kāmavardhani",lin:"Melakarta (parent) · the 51st",isParent:true,mela:51,parentName:null,
+  time:"Evening",type:"Sampūrṇa–Sampūrṇa (melakarta)",
+  aro:["S","R1","G3","M2","P","D1","N3","S^"],ava:["S^","N3","D1","P","M2","G3","R1","S"],
+  song:"“Apparāma Bhakti” — Tyagaraja",
+  sim:[["Mayamalavagowla","mela 15","<b>Lower madhyamam (M₂→M₁)</b> — its mirror."],
+       ["Subhapantuvarali","mela 45","<b>Lower gāndhāra (G₃→G₂)</b> — the near-namesake."],
+       ["Gamanashrama","mela 53","<b>Raise dhaivatam (D₁→D₂)</b>."],
+       ["Latangi","mela 63","<b>Raise rishabham (R₁→R₂)</b>."]]},
+ {n:"Nattai",alt:"Nāṭa",lin:"Janya of Chalanāṭa · mela 36",isParent:false,mela:36,parentName:"Chalanāṭa",
+  time:"Morning",type:"Shadava–Shadava (vakra, omits Dha)",
+  aro:["S","R3","G3","M1","P","N3","S^"],ava:["S^","N3","P","M1","G3","M1","R3","S"],
+  song:"“Jagadānandakāraka” — Tyagaraja",
+  sim:[["Chalanata","mela 36 · parent","<b>Add the dhaivatam (D₃)</b> → full sampūrṇa both ways."],
+       ["Gambhiranata","pentatonic","<b>Drop the rishabham (R₃)</b> → S G₃ M₁ P N₃ S."],
+       ["Kedaram","child of 29","<b>Soften the rishabham (R₃→R₂)</b>."],
+       ["Chayanata","Chāya Nāṭa","<b>Soften R₃→R₂ and add dhaivatam (D₂)</b>."]]},
+ {n:"Chakravakam",alt:"Cakravākam",lin:"Melakarta (parent) · the 16th",isParent:true,mela:16,parentName:null,
+  time:"Morning",type:"Sampūrṇa–Sampūrṇa (melakarta)",
+  aro:["S","R1","G3","M1","P","D2","N2","S^"],ava:["S^","N2","D2","P","M1","G3","R1","S"],
+  song:"“Etula Brotuvo” — Tyagaraja",
+  sim:[["Suryakantam","mela 17","<b>Raise niṣādam (N₂→N₃)</b>."],
+       ["Vakulabharanam","mela 14","<b>Lower dhaivatam (D₂→D₁)</b>."],
+       ["Harikambhoji","mela 28","<b>Raise rishabham (R₁→R₂)</b>."],
+       ["Malayamarutam","child of 16","<b>Drop madhyamam (M₁)</b>."]]},
+ {n:"Kharaharapriya",alt:"",lin:"Melakarta (parent) · the 22nd",isParent:true,mela:22,parentName:null,
+  time:"Evening",type:"Sampūrṇa–Sampūrṇa (melakarta)",
+  aro:["S","R2","G2","M1","P","D2","N2","S^"],ava:["S^","N2","D2","P","M1","G2","R2","S"],
+  song:"“Cakkani Rāja Mārgamu” — Tyagaraja",
+  sim:[["Natabhairavi","mela 20","<b>Lower dhaivatam (D₂→D₁)</b>."],
+       ["Harikambhoji","mela 28","<b>Raise gāndhāra (G₂→G₃)</b>."],
+       ["Hemavati","mela 58","<b>Raise madhyamam (M₁→M₂)</b>."],
+       ["Sriranjani","child of 22","<b>Drop panchamam (P)</b>."]]},
+ {n:"Madhyamavati",alt:"Madhyamāvati",lin:"Janya of Kharaharapriyā · mela 22",isParent:false,mela:22,parentName:"Kharaharapriyā",
+  time:"Evening",type:"Audava–Audava (pentatonic)",
+  aro:["S","R2","M1","P","N2","S^"],ava:["S^","N2","P","M1","R2","S"],
+  song:"“Rāmakathā Sudhā” — Tyagaraja",
+  sim:[["Kharaharapriya","mela 22 · parent","<b>Fill in G₂ and D₂</b> → full sampūrṇa."],
+       ["Suddha Dhanyasi","child of 22","Rishabham → gāndhāra — <b>R₂→G₂</b>."],
+       ["Suddha Saveri","child of 29","Niṣādam → dhaivatam — <b>N₂→D₂</b>."],
+       ["Sri ragam","child of 22","Same ascent; <b>vakra Ga/Dha in descent</b>."]]}
+];
+const TYPES=["Audava–Sampūrṇa","Vakra Audava–Shadava (no Pa)","Audava–Audava (pentatonic)","Sampūrṇa–Sampūrṇa (melakarta)","Shadava–Shadava (vakra, omits Dha)"];
+
+/* ============================ STORAGE ============================ */
+const SKEY="ragam_practice_progress_v1";
+const NKEY="ragam_practice_name_v1";
+let userName="";
+function loadName(){try{return localStorage.getItem(NKEY)||"";}catch(e){return "";}}
+function saveName(n){try{localStorage.setItem(NKEY,n);}catch(e){}}
+function applyName(){
+  const w=document.getElementById("whoLine");
+  if(w)w.textContent=(userName?userName+" · ":"")+"NZCMS Stage 3";
+  const fp=document.getElementById("footPhrase");
+  if(fp)fp.textContent=userName?("You've got this, "+userName+"."):"You've got this.";
+}
+function showNameModal(){
+  const ov=document.getElementById("nameOverlay"),inp=document.getElementById("nameInput");
+  inp.value=userName||"";ov.classList.remove("hide");setTimeout(()=>{try{inp.focus();}catch(e){}},60);
+}
+function hideNameModal(){document.getElementById("nameOverlay").classList.add("hide");}
+function loadP(){try{return JSON.parse(localStorage.getItem(SKEY))||{};}catch(e){return {};}}
+function saveP(o){try{localStorage.setItem(SKEY,JSON.stringify(o));}catch(e){}}
+let prog=loadP();
+function mark(name,ok){
+  if(!prog[name])prog[name]={a:0,c:0};
+  prog[name].a++; if(ok)prog[name].c++;
+  saveP(prog);
+}
+function mastery(name){const p=prog[name];if(!p||!p.a)return null;return p.c/p.a;}
+
+/* ============================ AUDIO ============================ */
+let AC=null,master=null,drone=null,soundOn=false,playToken=0;
+function ensureAudio(){
+  if(AC)return;
+  try{
+    AC=new (window.AudioContext||window.webkitAudioContext)();
+    master=AC.createGain();master.gain.value=0.9;master.connect(AC.destination);
+  }catch(e){AC=null;}
+}
+function turnSoundOn(){
+  ensureAudio();
+  if(AC&&AC.state==="suspended")AC.resume();
+  soundOn=!!AC;
+  const p=document.getElementById("soundPill");
+  p.classList.toggle("on",soundOn);
+  p.textContent=soundOn?"♪ Sound: on":"♪ Sound: off";
+}
+let baseFreq=293.66; // D4 default
+function freqOf(tok){return baseFreq*RATIO[tok];}
+function playNote(tok,t,dur){
+  if(!AC)return;
+  const f=freqOf(tok);
+  const o=AC.createOscillator(),o2=AC.createOscillator(),g=AC.createGain();
+  o.type="triangle";o2.type="sine";
+  o.frequency.value=f;o2.frequency.value=f*2;
+  const g2=AC.createGain();g2.gain.value=0.35;
+  o.connect(g);o2.connect(g2);g2.connect(g);g.connect(master);
+  const a=0.02,rel=Math.min(0.12,dur*0.4);
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(0.22,t+a);
+  g.gain.setValueAtTime(0.22,t+Math.max(a,dur-rel));
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.start(t);o2.start(t);o.stop(t+dur+0.02);o2.stop(t+dur+0.02);
+}
+let droneNodes=[];
+function startDrone(){
+  if(!AC||drone)return;
+  drone=AC.createGain();drone.gain.value=0.0;drone.connect(master);
+  drone.gain.linearRampToValueAtTime(0.07,AC.currentTime+0.6);
+  [baseFreq/2,baseFreq*RATIO["P"]/2,baseFreq].forEach(f=>{
+    const o=AC.createOscillator();o.type="sawtooth";o.frequency.value=f;
+    const lp=AC.createBiquadFilter();lp.type="lowpass";lp.frequency.value=900;
+    const g=AC.createGain();g.gain.value=0.5;
+    o.connect(lp);lp.connect(g);g.connect(drone);o.start();
+    droneNodes.push(o);
+  });
+}
+function stopDrone(){
+  if(!drone)return;
+  try{drone.gain.linearRampToValueAtTime(0.0001,AC.currentTime+0.4);}catch(e){}
+  const dn=droneNodes,dr=drone;droneNodes=[];drone=null;
+  setTimeout(()=>{dn.forEach(o=>{try{o.stop();}catch(e){}});},500);
+}
+function stopAll(){playToken++;}
+// play a sequence; onStep(token, index) for visual; returns total seconds
+function playSeq(tokens,dur,onStep,onDone){
+  if(!soundOn){turnSoundOn();}
+  if(!AC){if(onDone)onDone();return 0;}
+  if(AC.state==="suspended")AC.resume();
+  const myToken=++playToken;
+  let t=AC.currentTime+0.06;
+  tokens.forEach((tok,i)=>{
+    playNote(tok,t,dur*0.96);
+    const when=(t-AC.currentTime)*1000;
+    setTimeout(()=>{if(myToken===playToken&&onStep)onStep(tok,i);},Math.max(0,when));
+    t+=dur;
+  });
+  const total=(t-AC.currentTime);
+  setTimeout(()=>{if(myToken===playToken){if(onStep)onStep(null,-1);if(onDone)onDone();}},total*1000+40);
+  return total;
+}
+
+/* ============================ TUNER (experimental) ============================ */
+let tunerStream=null,tunerRAF=0,tunerOn=false,tunerAnalyser=null;
+async function startTuner(noteEl,needleEl,hintEl,onOk,onErr){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){onErr&&onErr("Mic not available here — try opening on a laptop or a hosted (https) page.");return;}
+  ensureAudio();
+  if(!AC){onErr&&onErr("Audio not available on this device.");return;}
+  try{tunerStream=await navigator.mediaDevices.getUserMedia({audio:true});}
+  catch(e){onErr&&onErr("Microphone blocked. Allow mic access, or open on a laptop.");return;}
+  try{if(AC.state==="suspended")await AC.resume();}catch(e){}
+  const src=AC.createMediaStreamSource(tunerStream);
+  tunerAnalyser=AC.createAnalyser();tunerAnalyser.fftSize=2048;
+  src.connect(tunerAnalyser);
+  tunerOn=true;onOk&&onOk();
+  const buf=new Float32Array(tunerAnalyser.fftSize);
+  function loop(){
+    if(!tunerOn)return;
+    tunerAnalyser.getFloatTimeDomainData(buf);
+    const f=autoCorrelate(buf,AC.sampleRate);
+    if(f>0){
+      const res=nearestSwara(f);
+      if(noteEl)noteEl.textContent=disp(res.tok);
+      if(needleEl){const pct=50+Math.max(-50,Math.min(50,res.cents));needleEl.style.left=pct+"%";needleEl.style.background=Math.abs(res.cents)<12?"var(--good)":"var(--teal)";}
+      if(hintEl)hintEl.textContent=(Math.abs(res.cents)<12?"in tune":(res.cents>0?"a little sharp":"a little flat"))+" · "+Math.round(res.cents)+"¢";
+    }else{
+      if(noteEl)noteEl.textContent="—";
+      if(hintEl)hintEl.textContent="sing a steady note…";
+    }
+    tunerRAF=requestAnimationFrame(loop);
+  }
+  loop();
+}
+function stopTuner(){
+  tunerOn=false;
+  if(tunerRAF)cancelAnimationFrame(tunerRAF);
+  tunerRAF=0;
+  if(tunerStream){tunerStream.getTracks().forEach(t=>{try{t.stop();}catch(e){}});tunerStream=null;}
+  tunerAnalyser=null;
+}
+function autoCorrelate(buf,sampleRate){
+  const SIZE=buf.length;let rms=0;
+  for(let i=0;i<SIZE;i++)rms+=buf[i]*buf[i];
+  rms=Math.sqrt(rms/SIZE);
+  if(rms<0.01)return -1;
+  let r1=0,r2=SIZE-1;const thres=0.2;
+  for(let i=0;i<SIZE/2;i++){if(Math.abs(buf[i])<thres){r1=i;break;}}
+  for(let i=1;i<SIZE/2;i++){if(Math.abs(buf[SIZE-i])<thres){r2=SIZE-i;break;}}
+  const b=buf.slice(r1,r2);const n=b.length;
+  if(n<32)return -1;
+  const c=new Array(n).fill(0);
+  for(let i=0;i<n;i++)for(let j=0;j<n-i;j++)c[i]+=b[j]*b[j+i];
+  let d=0;while(d<n-1&&c[d]>c[d+1])d++;
+  let maxval=-1,maxpos=-1;
+  for(let i=d;i<n;i++){if(c[i]>maxval){maxval=c[i];maxpos=i;}}
+  if(maxpos<=0)return -1;
+  let T0=maxpos;
+  const x1=c[T0-1]||0,x2=c[T0]||0,x3=c[T0+1]||0;
+  const a=(x1+x3-2*x2)/2,bb=(x3-x1)/2;
+  if(a)T0=T0-bb/(2*a);
+  if(T0<=0)return -1;
+  const freq=sampleRate/T0;
+  if(freq<70||freq>1200)return -1;
+  return freq;
+}
+function nearestSwara(freq){
+  let ratio=freq/baseFreq;
+  while(ratio<1)ratio*=2;
+  while(ratio>=2)ratio/=2;
+  const cands=["S","R1","R2","G2","G3","M1","M2","P","D1","D2","N2","N3"];
+  let best="S",bestCents=1e9;
+  cands.forEach(tok=>{const cents=1200*Math.log2(ratio/RATIO[tok]);if(Math.abs(cents)<Math.abs(bestCents)){bestCents=cents;best=tok;}});
+  // also consider octave boundary (note just under upper Sa)
+  const cTop=1200*Math.log2(ratio/2);
+  if(Math.abs(cTop)<Math.abs(bestCents)){bestCents=cTop;best="S^";}
+  return {tok:best,cents:bestCents};
+}
+
+/* ============================ HELPERS ============================ */
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function sample(a,n,exclude){const pool=a.filter(x=>x!==exclude);return shuffle(pool).slice(0,n);}
+const $=s=>document.querySelector(s);
+function el(html){const d=document.createElement("div");d.innerHTML=html.trim();return d.firstChild;}
+
+/* ============================ ROUTER ============================ */
+let tab="learn";
+document.querySelectorAll("nav.tabs button").forEach(b=>{
+  b.onclick=()=>{tab=b.dataset.tab;document.querySelectorAll("nav.tabs button").forEach(x=>x.classList.toggle("on",x===b));stopAll();render();};
+});
+function render(){
+  stopAll();
+  stopTuner();
+  const app=$("#app");app.innerHTML="";
+  if(tab==="learn")viewLearn(app);
+  else if(tab==="practice")viewPracticeMenu(app);
+  else if(tab==="mock")viewMockIntro(app);
+  window.scrollTo(0,0);
+}
+
+/* ============================ LEARN ============================ */
+function swHTML(arr){return arr.map(t=>{const d=disp(t);return d.replace(/([₁₂₃])/,'<sub>$1</sub>').replace('<sub>','<sub>').replace(/(.)([₁₂₃])/,(m,a,b)=>a+'<sub>'+b+'</sub>');}).join(" ");}
+function swPretty(arr){
+  return arr.map(t=>{
+    if(t==="S")return "S"; if(t==="S^")return "Ṡ";
+    return t[0]+'<sub>'+t[1]+'</sub>';
+  }).join(" ");
+}
+function viewLearn(app){
+  app.appendChild(el(`<h2 class="view-h">Learn the ten</h2>`));
+  app.appendChild(el(`<p class="view-s">Tap ▶ to hear any scale. Everything you need to recite is here.</p>`));
+  R.forEach((r,i)=>{
+    const sims=r.sim.map(s=>`<tr><td class="r">${s[0]}<small>${s[1]}</small></td><td>${s[2]}</td></tr>`).join("");
+    const card=el(`
+     <div class="lcard">
+      <div class="lhead">
+        <div class="idx">${String(i+1).padStart(2,"0")}</div>
+        <div style="flex:1">
+          <h3>${r.n}</h3>
+          <div class="lin">${r.alt?`<em>${r.alt}</em> · `:""}${r.lin}</div>
+        </div>
+        <span class="pill ${r.isParent?"parent":"child"}">${r.isParent?"Parent · "+r.mela:"Child · "+r.mela}</span>
+      </div>
+      <div class="scales2">
+        <div class="sc"><div class="l">↑ Ārohaṇam</div><div class="sw">${swPretty(r.aro)}</div>
+          <button class="play-mini" data-pa="${i}">▶ hear ascent</button></div>
+        <div class="sc"><div class="l">↓ Avarohaṇam</div><div class="sw">${swPretty(r.ava)}</div>
+          <button class="play-mini" data-pd="${i}">▶ hear descent</button></div>
+      </div>
+      <div class="lfacts">
+        <div><div class="k">Combination</div><div class="v">${r.type}</div></div>
+        <div><div class="k">Parent / child</div><div class="v">${r.isParent?("Parent — mela "+r.mela):("Child of "+r.parentName+" ("+r.mela+")")}</div></div>
+        <div><div class="k">Time</div><div class="v">${r.time==="Morning"?"☀ Morning":"☾ Evening"} <span class="small" style="color:var(--ink-soft)">(traditional)</span></div></div>
+        <div><div class="k">Famous song</div><div class="v">${r.song}</div></div>
+      </div>
+      <div class="lsim"><div class="sl">Four cousins — the one change</div><table>${sims}</table></div>
+     </div>`);
+    app.appendChild(card);
+  });
+  app.querySelectorAll("[data-pa]").forEach(b=>b.onclick=()=>{const r=R[+b.dataset.pa];playSeq(r.aro,0.42);});
+  app.querySelectorAll("[data-pd]").forEach(b=>b.onclick=()=>{const r=R[+b.dataset.pd];playSeq(r.ava,0.42);});
+}
+
+/* ============================ PRACTICE MENU ============================ */
+function viewPracticeMenu(app){
+  app.appendChild(el(`<h2 class="view-h">Practice</h2>`));
+  app.appendChild(el(`<p class="view-s">${userName?("Hi "+esc(userName)+" — pick"):"Pick"} a drill. Your progress is saved on this device.</p>`));
+  const menu=[
+    ["🎵","Scale Trainer","Hear & sing along — pick your Sa, set the speed, loop the scale.","trainer"],
+    ["👂","Name by Ear","It only plays the scale — you name it from listening.","ear"],
+    ["⚖️","Compare Two","Put any two ragams side by side and hear the difference.","compare"],
+    ["⚡","Quick-fire Theory","Parent or child, melakarta, type, time — fast multiple-choice.","quiz"],
+    ["🧩","Scale Builder","Tap the swaras into the right order. Auto-checked.","build"],
+    ["🔍","Name that Ragam","See and hear a scale, then name it.","name"],
+    ["🔀","Morph Challenge","One change turns this ragam into… which?","morph"]
+  ];
+  const g=el(`<div class="grid"></div>`);
+  menu.forEach(m=>{
+    const c=el(`<button class="menu-card"><span class="mi">${m[0]}</span><span><span class="mt">${m[1]}</span><span class="md">${m[2]}</span></span></button>`);
+    c.onclick=()=>{stopAll();const app=$("#app");app.innerHTML="";
+      if(m[3]==="trainer")viewTrainer(app);
+      else if(m[3]==="ear")startQuiz(app,buildPool(["ear"]),"Name by Ear");
+      else if(m[3]==="compare")viewCompare(app);
+      else if(m[3]==="quiz")startQuiz(app,buildPool(["pc","mela","type","time","parent"]),"Quick-fire Theory");
+      else if(m[3]==="build")viewBuilder(app);
+      else if(m[3]==="name")startQuiz(app,buildPool(["name"]),"Name that Ragam");
+      else if(m[3]==="morph")startQuiz(app,buildPool(["morph"]),"Morph Challenge");
+      window.scrollTo(0,0);
+    };
+    g.appendChild(c);
+  });
+  app.appendChild(g);
+
+  // progress summary
+  const summary=el(`<div class="panel" style="margin-top:20px"><div class="lbl">Your ragams</div><div class="dotgrid" id="dg"></div></div>`);
+  app.appendChild(summary);
+  const dg=summary.querySelector("#dg");
+  R.forEach(r=>{
+    const m=mastery(r.n);
+    let col=m===null?"#cdbfa6":(m>=0.75?"var(--good)":m>=0.45?"var(--near)":"var(--bad)");
+    dg.appendChild(el(`<div class="dotrow"><span class="dot" style="background:${col}"></span><span style="color:var(--ink)">${r.n}</span></div>`));
+  });
+}
+
+/* ============================ SCALE TRAINER ============================ */
+let trainerState={idx:0,dur:0.45,speed2:false,drone:false,call:false,loop:false};
+let trainerRun=0;
+function viewTrainer(app){
+  app.appendChild(el(`<button class="back" id="bk">‹ Practice menu</button>`));
+  app.appendChild(el(`<h2 class="view-h">Scale Trainer</h2>`));
+  app.appendChild(el(`<p class="view-s">Choose your Sa to match your voice, then sing along.</p>`));
+  const wrap=el(`<div class="panel"></div>`);
+  // ragam picker
+  const rp=el(`<div><div class="lbl">Ragam</div><div class="pickwrap" id="rp"></div></div>`);
+  R.forEach((r,i)=>{const b=el(`<button${i===trainerState.idx?' class="on"':""}>${r.n}</button>`);b.onclick=()=>{trainerState.idx=i;trainerRun++;stopAll();stopDrone();stopTuner();trainerState.drone=false;const a=$("#app");a.innerHTML="";viewTrainer(a);};rp.querySelector("#rp").appendChild(b);});
+  wrap.appendChild(rp);
+
+  // sa + speed controls
+  const ctr=el(`<div style="margin-top:14px">
+     <div class="ctrlrow">
+       <label>Sa (pitch)</label>
+       <select id="sa"></select>
+       <button class="btn ghost" id="droneBtn">Drone: off</button>
+     </div>
+     <div class="ctrlrow">
+       <label>Speed</label>
+       <input type="range" id="sp" min="0.22" max="0.8" step="0.02" value="${trainerState.dur}">
+       <button class="btn ghost" id="sp2">1st speed</button>
+     </div>
+   </div>`);
+  wrap.appendChild(ctr);
+  const saSel=ctr.querySelector("#sa");
+  const pitches=[["C",261.63],["C♯",277.18],["D",293.66],["D♯",311.13],["E",329.63],["F",349.23],["F♯",369.99],["G",392.00],["G♯",415.30],["A",440.00]];
+  pitches.forEach(p=>{const o=el(`<option value="${p[1]}">${p[0]}</option>`);if(Math.abs(p[1]-baseFreq)<1)o.selected=true;saSel.appendChild(o);});
+  saSel.onchange=()=>{baseFreq=+saSel.value;if(drone){stopDrone();startDrone();}};
+
+  const droneBtn=ctr.querySelector("#droneBtn");
+  droneBtn.onclick=()=>{if(!soundOn)turnSoundOn();trainerState.drone=!trainerState.drone;if(trainerState.drone){startDrone();droneBtn.textContent="Drone: on";droneBtn.classList.add("gold");}else{stopDrone();droneBtn.textContent="Drone: off";droneBtn.classList.remove("gold");}};
+  if(trainerState.drone){startDrone();droneBtn.textContent="Drone: on";droneBtn.classList.add("gold");}
+
+  const sp=ctr.querySelector("#sp");sp.value=trainerState.dur;sp.oninput=()=>{trainerState.dur=+sp.value;};
+  const sp2=ctr.querySelector("#sp2");sp2.textContent=trainerState.speed2?"2nd speed":"1st speed";if(trainerState.speed2)sp2.classList.add("gold");
+  sp2.onclick=()=>{trainerState.speed2=!trainerState.speed2;sp2.textContent=trainerState.speed2?"2nd speed":"1st speed";sp2.classList.toggle("gold",trainerState.speed2);};
+
+  // display
+  const np=el(`<div class="now-playing" id="np">—</div>`);
+  const seq=el(`<div class="seqline" id="seq"></div>`);
+  wrap.appendChild(np);wrap.appendChild(seq);
+
+  // buttons
+  const r=R[trainerState.idx];
+  const btns=el(`<div class="bigbtns" style="justify-content:center;margin-top:14px">
+     <button class="btn teal" id="bAro">▶ Ārohaṇam</button>
+     <button class="btn teal" id="bAva">▶ Avarohaṇam</button>
+     <button class="btn primary" id="bBoth">▶ Both</button>
+     <button class="btn ghost" id="bStop">■ Stop</button>
+   </div>`);
+  wrap.appendChild(btns);
+  const opts=el(`<div class="ctrlrow" style="justify-content:center;margin-top:12px">
+     <label class="toggle"><input type="checkbox" id="cLoop" ${trainerState.loop?"checked":""}> loop</label>
+     <label class="toggle"><input type="checkbox" id="cCall" ${trainerState.call?"checked":""}> call &amp; response (it sings, then you sing)</label>
+   </div>`);
+  wrap.appendChild(opts);
+  // tuner (experimental)
+  const tuner=el(`<div style="margin-top:14px;border-top:1px solid var(--ivory-line);padding-top:12px">
+     <div class="ctrlrow" style="justify-content:space-between">
+       <span class="lbl" style="margin:0">🎤 Pitch tuner <span style="color:var(--ink-soft);text-transform:none;letter-spacing:0;font-family:'Spectral'">(experimental)</span></span>
+       <button class="btn ghost" id="tunBtn">Turn on</button>
+     </div>
+     <div id="tunBody" class="hide" style="margin-top:8px">
+       <div id="tunNote" style="text-align:center;font-family:'Spline Sans Mono';font-size:2rem;color:var(--kumkum);min-height:1.3em">—</div>
+       <div style="position:relative;height:10px;background:rgba(0,0,0,.08);border-radius:6px;margin:8px 0 6px">
+         <div style="position:absolute;left:50%;top:-3px;width:2px;height:16px;background:var(--ink-soft)"></div>
+         <div id="tunNeedle" style="position:absolute;left:50%;top:-4px;width:10px;height:18px;border-radius:3px;background:var(--teal);transform:translateX(-50%);transition:left .08s"></div>
+       </div>
+       <div class="small" style="text-align:center;color:var(--ink-soft)" id="tunHint">sing a steady note…</div>
+     </div>
+   </div>`);
+  wrap.appendChild(tuner);
+  const tunBtn=tuner.querySelector("#tunBtn");
+  tunBtn.onclick=()=>{
+    if(tunerOn){stopTuner();tunBtn.textContent="Turn on";tunBtn.classList.remove("gold");tuner.querySelector("#tunBody").classList.add("hide");}
+    else{
+      tuner.querySelector("#tunBody").classList.remove("hide");tunBtn.textContent="starting…";
+      startTuner(tuner.querySelector("#tunNote"),tuner.querySelector("#tunNeedle"),tuner.querySelector("#tunHint"),
+        ()=>{tunBtn.textContent="Turn off";tunBtn.classList.add("gold");},
+        (msg)=>{tunBtn.textContent="Turn on";tunBtn.classList.remove("gold");tuner.querySelector("#tunNote").textContent="✕";tuner.querySelector("#tunHint").textContent=msg;});
+    }
+  };
+  app.appendChild(wrap);
+
+  function d(){return trainerState.dur*(trainerState.speed2?0.55:1);}
+  function showStep(tok,i){
+    const npE=$("#np"),seqE=$("#seq");if(!npE)return;
+    if(i===-1){npE.textContent="—";seqE.innerHTML=dispSeq(curSeq());return;}
+    npE.textContent=disp(tok);
+    seqE.innerHTML=curSeq().map((t,k)=>k===i?`<span class="cur">${disp(t)}</span>`:disp(t)).join(" ");
+  }
+  let mode="aro";
+  function curSeq(){return mode==="ava"?r.ava:(mode==="both"?r.aro.concat(r.ava):r.aro);}
+  function go(m){
+    mode=m;stopAll();
+    const myRun=++trainerRun;
+    const seqArr=curSeq();
+    const callOn=$("#cCall").checked;trainerState.call=callOn;
+    const loopOn=$("#cLoop").checked;trainerState.loop=loopOn;
+    $("#seq").innerHTML=dispSeq(seqArr);
+    function runOnce(then){
+      if(myRun!==trainerRun)return;
+      playSeq(seqArr,d(),showStep,()=>{
+        if(myRun!==trainerRun)return;
+        if(callOn){
+          $("#np").innerHTML='<span style="color:var(--teal)">your turn — sing!</span>';
+          setTimeout(()=>{if(myRun!==trainerRun)return;then&&then();},seqArr.length*d()*1000);
+        }else{then&&then();}
+      });
+    }
+    function loopRun(){if(myRun!==trainerRun)return;runOnce(()=>{if(myRun!==trainerRun)return;if($("#cLoop")&&$("#cLoop").checked)loopRun();else showStep(null,-1);});}
+    loopRun();
+  }
+  btns.querySelector("#bAro").onclick=()=>go("aro");
+  btns.querySelector("#bAva").onclick=()=>go("ava");
+  btns.querySelector("#bBoth").onclick=()=>go("both");
+  btns.querySelector("#bStop").onclick=()=>{trainerRun++;stopAll();showStep(null,-1);};
+  showStep(null,-1);
+  $("#bk").onclick=()=>{trainerRun++;stopAll();stopDrone();stopTuner();trainerState.drone=false;const a=$("#app");a.innerHTML="";viewPracticeMenu(a);};
+}
+function clearAndTrainer(){const a=$("#app");a.innerHTML="";viewTrainer(a);return false;}
+
+/* ============================ QUIZ ENGINE ============================ */
+function buildPool(cats){
+  let pool=[];
+  R.forEach(r=>{
+    if(cats.includes("pc"))pool.push({
+      cat:"pc",ragam:r.n,type:"mcq",
+      prompt:`Is <b>${r.n}</b> a parent (melakarta) or a child (janya)?`,
+      opts:["Parent (melakarta)","Child (janya)"],ans:r.isParent?0:1});
+    if(cats.includes("mela"))pool.push({
+      cat:"mela",ragam:r.n,type:"mcq",
+      prompt:r.isParent?`<b>${r.n}</b> is which melakarta number?`:`<b>${r.n}</b> is a child of which melakarta number?`,
+      build:()=>{const correct=r.mela;const others=sample([15,16,17,22,28,29,36,51,65,20,45,8].filter(x=>x!==correct),3);const o=shuffle([correct,...others]);return{opts:o.map(String),ans:o.indexOf(correct)};}});
+    if(cats.includes("type"))pool.push({
+      cat:"type",ragam:r.n,type:"mcq",
+      prompt:`What is the arohanam–avarohanam <b>type</b> of ${r.n}?`,
+      build:()=>{const correct=r.type;const o=shuffle([correct,...sample(TYPES,3,correct)]);return{opts:o,ans:o.indexOf(correct)};}});
+    if(cats.includes("time"))pool.push({
+      cat:"time",ragam:r.n,type:"mcq",
+      prompt:`Is <b>${r.n}</b> traditionally a morning or an evening ragam?`,
+      opts:["☀ Morning","☾ Evening"],ans:r.time==="Morning"?0:1});
+    if(cats.includes("parent")&&!r.isParent)pool.push({
+      cat:"parent",ragam:r.n,type:"mcq",
+      prompt:`<b>${r.n}</b> is a child of which melakarta?`,
+      build:()=>{const correct=r.parentName;const names=["Māyāmāḷavagauḷa","Dheeraśaṅkarābharaṇam","Sūryakāntam","Chalanāṭa","Kharaharapriyā","Harikambhōji","Mēchakalyāṇi"];const o=shuffle([correct,...sample(names,3,correct)]);return{opts:o,ans:o.indexOf(correct)};}});
+    if(cats.includes("name"))pool.push({
+      cat:"name",ragam:r.n,type:"mcq",playSeq:r.aro,
+      prompt:`Which ragam has this scale?`,
+      sub:`↑ ${dispSeq(r.aro)} &nbsp;&nbsp; ↓ ${dispSeq(r.ava)}`,
+      build:()=>{const correct=r.n;const o=shuffle([correct,...sample(R.map(x=>x.n),3,correct)]);return{opts:o,ans:o.indexOf(correct)};}});
+    if(cats.includes("ear"))pool.push({
+      cat:"ear",ragam:r.n,type:"mcq",playSeq:r.aro,ear:true,
+      prompt:`Listen — which ragam is this?`,
+      build:()=>{const correct=r.n;const o=shuffle([correct,...sample(R.map(x=>x.n),3,correct)]);return{opts:o,ans:o.indexOf(correct)};}});
+    if(cats.includes("morph")){
+      const target=pick(r.sim);
+      pool.push({
+        cat:"morph",ragam:r.n,type:"mcq",
+        prompt:`Start from <b>${r.n}</b>. Which change gives you <b>${target[0]}</b>?`,
+        build:()=>{const correct=target[2].replace(/<\/?b>/g,"");const others=r.sim.filter(s=>s!==target).map(s=>s[2].replace(/<\/?b>/g,""));const o=shuffle([correct,...others.slice(0,3)]);return{opts:o,ans:o.indexOf(correct)};}});
+    }
+  });
+  return shuffle(pool);
+}
+
+function startQuiz(app,pool,title,n){
+  pool=pool.slice(0,n||10);
+  let i=0,score=0;
+  function step(){
+    stopAll();app.innerHTML="";
+    app.appendChild(el(`<button class="back" id="bk">‹ Practice menu</button>`));
+    if(i>=pool.length){
+      app.appendChild(el(`<div class="q-card center"><div class="report-big">${score}/${pool.length}</div><p style="color:var(--ink-soft);font-size:1.05rem;margin-top:4px">${score===pool.length?"Perfect — you know these cold.":score>=pool.length*0.7?"Strong. A little polish and you're there.":"Good practice — go again and it'll stick."}</p><div class="bigbtns" style="justify-content:center;margin-top:8px"><button class="btn gold" id="again">Go again</button></div></div>`));
+      app.querySelector("#again").onclick=()=>{i=0;score=0;pool=shuffle(pool);step();};
+      app.querySelector("#bk").onclick=()=>{const a=$("#app");a.innerHTML="";viewPracticeMenu(a);};
+      return;
+    }
+    const q=pool[i];
+    const built=q.build?q.build():{opts:q.opts,ans:q.ans};
+    app.appendChild(el(`<div class="q-meta"><span>${title}</span><span>Q ${i+1} / ${pool.length} · score ${score}</span></div>`));
+    const card=el(`<div class="q-card"><div class="q-prompt">${q.prompt}</div>${q.sub?`<div class="q-sub mono">${q.sub}</div>`:""}<div class="opts"></div><div class="feedback" id="fb"></div></div>`);
+    if(q.playSeq){const pb=el(`<button class="btn teal" style="margin-bottom:12px" id="hear">▶ ${q.ear?"Play the scale":"Hear the scale"}</button>`);pb.onclick=()=>playSeq(q.playSeq.concat(R.find(x=>x.n===q.ragam).ava),0.4);card.insertBefore(pb,card.querySelector(".opts"));}
+    const optsEl=card.querySelector(".opts");
+    built.opts.forEach((o,k)=>{
+      const b=el(`<button class="opt">${o}</button>`);
+      b.onclick=()=>{
+        if(card.dataset.done)return;card.dataset.done="1";
+        const ok=k===built.ans;
+        Array.from(optsEl.children).forEach((c,ci)=>{if(ci===built.ans)c.classList.add("correct");else if(ci===k)c.classList.add("wrong");else c.classList.add("muted");});
+        const fb=card.querySelector("#fb");fb.classList.add("show",ok?"ok":"no");
+        fb.innerHTML=ok?"✓ Correct!":`Not quite — the answer is <b>${built.opts[built.ans]}</b>.`;
+        if(ok)score++;mark(q.ragam,ok);
+        const next=el(`<div class="bigbtns" style="margin-top:14px"><button class="btn gold" id="nx">${i+1>=pool.length?"See result":"Next →"}</button></div>`);
+        card.appendChild(next);next.querySelector("#nx").onclick=()=>{i++;step();};
+      };
+      optsEl.appendChild(b);
+    });
+    app.appendChild(card);
+    app.querySelector("#bk").onclick=()=>{stopAll();const a=$("#app");a.innerHTML="";viewPracticeMenu(a);};
+    window.scrollTo(0,0);
+  }
+  step();
+}
+
+/* ============================ SCALE BUILDER ============================ */
+function viewBuilder(app,poolNames){
+  let order=shuffle(poolNames||R.map(r=>r.n));
+  let qi=0,score=0;
+  function step(){
+    stopAll();app.innerHTML="";
+    app.appendChild(el(`<button class="back" id="bk">‹ Practice menu</button>`));
+    if(qi>=order.length){
+      app.appendChild(el(`<div class="q-card center"><div class="report-big">${score}/${order.length}</div><p style="color:var(--ink-soft);margin-top:4px">Scales built correctly.</p><div class="bigbtns" style="justify-content:center"><button class="btn gold" id="again">Go again</button></div></div>`));
+      app.querySelector("#again").onclick=()=>{order=shuffle(order);qi=0;score=0;step();};
+      app.querySelector("#bk").onclick=()=>{const a=$("#app");a.innerHTML="";viewPracticeMenu(a);};
+      return;
+    }
+    const r=R.find(x=>x.n===order[qi]);
+    const which=Math.random()<0.5?"aro":"ava";
+    const target=which==="aro"?r.aro:r.ava;
+    // tiles: correct + a couple distractors
+    const distractPool=["R1","R2","R3","G2","G3","M1","M2","D1","D2","D3","N2","N3","P"].filter(t=>!target.includes(t));
+    let tiles=shuffle(target.concat(sample(distractPool,2)));
+    let placed=[];
+    app.appendChild(el(`<div class="q-meta"><span>Scale Builder</span><span>${qi+1} / ${order.length} · score ${score}</span></div>`));
+    const card=el(`<div class="q-card">
+       <div class="q-prompt">Build the <b>${which==="aro"?"ārohaṇam (↑)":"avarohaṇam (↓)"}</b> of ${r.n}</div>
+       <div class="build-target" id="tgt"><span class="ph">tap swaras in order…</span></div>
+       <div class="tiles" id="tiles"></div>
+       <div class="bigbtns" style="margin-top:14px">
+         <button class="btn ghost" id="undo">⌫ Undo</button>
+         <button class="btn ghost" id="clr">Clear</button>
+         <button class="btn primary" id="chk">Check</button>
+       </div>
+       <div class="feedback" id="fb"></div>
+     </div>`);
+    app.appendChild(card);
+    const tgt=card.querySelector("#tgt"),tilesEl=card.querySelector("#tiles");
+    function redraw(){
+      tgt.innerHTML=placed.length?placed.map(p=>disp(p.tok)).join(" "):'<span class="ph">tap swaras in order…</span>';
+      Array.from(tilesEl.children).forEach((c,k)=>c.classList.toggle("used",tiles[k].used));
+    }
+    tiles.forEach((tok,k)=>{
+      const tobj={tok,used:false};tiles[k]=tobj;
+      const b=el(`<button class="tile">${disp(tok)}</button>`);
+      b.onclick=()=>{if(tobj.used||card.dataset.done)return;tobj.used=true;placed.push(tobj);redraw();};
+      tilesEl.appendChild(b);
+    });
+    card.querySelector("#undo").onclick=()=>{if(card.dataset.done)return;const last=placed.pop();if(last)last.used=false;redraw();};
+    card.querySelector("#clr").onclick=()=>{if(card.dataset.done)return;placed.forEach(p=>p.used=false);placed=[];redraw();};
+    card.querySelector("#chk").onclick=()=>{
+      if(card.dataset.done)return;
+      const got=placed.map(p=>p.tok);
+      const ok=got.length===target.length&&got.every((t,k)=>t===target[k]);
+      card.dataset.done="1";
+      const fb=card.querySelector("#fb");fb.classList.add("show",ok?"ok":"no");
+      fb.innerHTML=ok?"✓ Correct!":`Not quite. The answer is:<br><span class="sw" style="font-size:1.1rem">${swPretty(target)}</span>`;
+      if(ok)score++;mark(r.n,ok);
+      const nx=el(`<div class="bigbtns" style="margin-top:12px"><button class="btn gold" id="nx">${qi+1>=order.length?"See result":"Next →"}</button></div>`);
+      card.appendChild(nx);nx.querySelector("#nx").onclick=()=>{qi++;step();};
+    };
+    app.querySelector("#bk").onclick=()=>{const a=$("#app");a.innerHTML="";viewPracticeMenu(a);};
+    window.scrollTo(0,0);
+  }
+  step();
+}
+
+/* ============================ COMPARE TWO ============================ */
+let cmpA=0,cmpB=4;
+function swSet(r){const s=new Set();r.aro.concat(r.ava).forEach(t=>{if(t!=="S"&&t!=="S^")s.add(t);});return s;}
+function viewCompare(app){
+  stopAll();
+  app.appendChild(el(`<button class="back" id="bk">‹ Practice menu</button>`));
+  app.appendChild(el(`<h2 class="view-h">Compare two ragams</h2>`));
+  app.appendChild(el(`<p class="view-s">Pick two. Notes that belong to only one of them are highlighted, and you can hear them back to back.</p>`));
+  const wrap=el(`<div class="panel"></div>`);
+  function pickerRow(label,which){
+    const row=el(`<div style="margin-bottom:10px"><div class="lbl">${label}</div><div class="pickwrap" id="p${which}"></div></div>`);
+    R.forEach((r,i)=>{const sel=(which==="A"?cmpA:cmpB)===i;const b=el(`<button${sel?' class="on"':""}>${r.n}</button>`);b.onclick=()=>{if(which==="A")cmpA=i;else cmpB=i;rerender();};row.querySelector("#p"+which).appendChild(b);});
+    return row;
+  }
+  wrap.appendChild(pickerRow("Ragam A","A"));
+  wrap.appendChild(pickerRow("Ragam B","B"));
+  const out=el(`<div id="cmpOut"></div>`);
+  wrap.appendChild(out);
+  app.appendChild(wrap);
+  function rerender(){stopAll();const a=$("#app");a.innerHTML="";viewCompare(a);}
+  const A=R[cmpA],B=R[cmpB];
+  const sa=swSet(A),sb=swSet(B);
+  function scaleHTML(r,otherSet){
+    function line(arr){return arr.map(t=>{
+      const base=(t==="S"||t==="S^");
+      const uniq=!base&&!otherSet.has(t);
+      const d=swPretty([t]);
+      return uniq?`<span style="color:var(--kumkum);font-weight:700">${d}</span>`:d;
+    }).join(" ");}
+    return `<div class="sw" style="font-size:1.04rem">↑ ${line(r.aro)}</div><div class="sw" style="font-size:1.04rem;margin-top:3px">↓ ${line(r.ava)}</div>`;
+  }
+  const onlyA=[...sa].filter(x=>!sb.has(x));
+  const onlyB=[...sb].filter(x=>!sa.has(x));
+  function names(list){return list.length?list.map(t=>swPretty([t])).join(", "):"— (nothing extra)";}
+  const cmp=el(`
+    <div class="panel" style="background:#fff;margin-top:14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div>
+          <div style="font-family:'Marcellus';color:var(--kumkum);font-size:1.18rem">${A.n}</div>
+          <div class="small" style="color:var(--ink-soft);margin-bottom:4px">${A.type}</div>
+          ${scaleHTML(A,sb)}
+          <button class="btn teal" id="pa" style="margin-top:8px">▶ Hear ${A.n}</button>
+        </div>
+        <div>
+          <div style="font-family:'Marcellus';color:var(--teal);font-size:1.18rem">${B.n}</div>
+          <div class="small" style="color:var(--ink-soft);margin-bottom:4px">${B.type}</div>
+          ${scaleHTML(B,sa)}
+          <button class="btn teal" id="pb" style="margin-top:8px">▶ Hear ${B.n}</button>
+        </div>
+      </div>
+      <div style="margin-top:14px;border-top:1px solid var(--ivory-line);padding-top:12px">
+        <div class="lbl">What's different</div>
+        <p style="margin:6px 0 0">Only in <b style="color:var(--kumkum)">${A.n}</b>: <span class="sw">${names(onlyA)}</span><br>Only in <b style="color:var(--teal)">${B.n}</b>: <span class="sw">${names(onlyB)}</span></p>
+        <button class="btn primary" id="pboth" style="margin-top:12px">▶ Hear both — ${A.n}, then ${B.n}</button>
+      </div>
+    </div>`);
+  out.appendChild(cmp);
+  cmp.querySelector("#pa").onclick=()=>playSeq(A.aro.concat(A.ava),0.4);
+  cmp.querySelector("#pb").onclick=()=>playSeq(B.aro.concat(B.ava),0.4);
+  cmp.querySelector("#pboth").onclick=()=>{playSeq(A.aro.concat(A.ava),0.4,null,()=>{setTimeout(()=>playSeq(B.aro.concat(B.ava),0.4),450);});};
+  app.querySelector("#bk").onclick=()=>{stopAll();const a=$("#app");a.innerHTML="";viewPracticeMenu(a);};
+  window.scrollTo(0,0);
+}
+
+/* ============================ MOCK EXAM ============================ */
+function viewMockIntro(app){
+  app.appendChild(el(`<h2 class="view-h">Mock Oral Exam</h2>`));
+  app.appendChild(el(`<p class="view-s">A mixed set of questions, examiner-style. Some you answer in your head, then tap to reveal and rate yourself honestly.</p>`));
+  const card=el(`<div class="panel">
+     <div class="lbl">How it works</div>
+     <p style="margin:6px 0 0">You'll get a run of questions across all ten ragams — naming scales, parent &amp; type, singing a scale, and the cousin-changes. For the "sing it" questions, sing aloud first, then reveal the answer and mark <b>Got it / Nearly / Missed</b>. At the end you'll see what to revise.</p>
+     <div class="bigbtns" style="margin-top:16px">
+        <button class="btn gold" id="start10">Start — 10 questions</button>
+        <button class="btn ghost" id="start6">Quick 6</button>
+     </div>
+   </div>`);
+  app.appendChild(card);
+  card.querySelector("#start10").onclick=()=>runMock(app,10);
+  card.querySelector("#start6").onclick=()=>runMock(app,6);
+}
+function buildMockPool(){
+  let pool=buildPool(["pc","mela","type","name","ear","morph","parent"]);
+  // add "sing / recite" open questions
+  R.forEach(r=>{
+    const which=Math.random()<0.5?"aro":"ava";
+    pool.push({cat:"sing",ragam:r.n,type:"open",
+      prompt:`Sing the <b>${which==="aro"?"ārohaṇam":"avarohaṇam"}</b> of ${r.n}.`,
+      sub:"Sing it aloud, then reveal to check.",
+      revealSeq:which==="aro"?r.aro:r.ava});
+    pool.push({cat:"recite",ragam:r.n,type:"open",
+      prompt:`Tell the examiner everything about <b>${r.n}</b>.`,
+      sub:"Parent/child, melakarta, type, arohanam–avarohanam.",
+      revealHTML:`${r.isParent?"<b>Parent</b> — melakarta "+r.mela:"<b>Child</b> of "+r.parentName+" (mela "+r.mela+")"} · ${r.type}<br>↑ <span class="sw">${swPretty(r.aro)}</span><br>↓ <span class="sw">${swPretty(r.ava)}</span>`});
+  });
+  return shuffle(pool);
+}
+function runMock(app,n){
+  let pool=buildMockPool().slice(0,n);
+  let i=0;const results=[];
+  function step(){
+    stopAll();app.innerHTML="";
+    app.appendChild(el(`<button class="back" id="bk">‹ End exam</button>`));
+    if(i>=pool.length){return mockReport(app,results);}
+    const q=pool[i];
+    app.appendChild(el(`<div class="q-meta"><span>Mock Exam</span><span>Question ${i+1} / ${pool.length}</span></div>`));
+    if(q.type==="mcq"){
+      const built=q.build?q.build():{opts:q.opts,ans:q.ans};
+      const card=el(`<div class="q-card"><div class="q-prompt">${q.prompt}</div>${q.sub?`<div class="q-sub mono">${q.sub}</div>`:""}<div class="opts"></div><div class="feedback" id="fb"></div></div>`);
+      if(q.playSeq){const pb=el(`<button class="btn teal" style="margin-bottom:12px" id="hear">▶ Hear the scale</button>`);pb.onclick=()=>playSeq(q.playSeq.concat(R.find(x=>x.n===q.ragam).ava),0.4);card.insertBefore(pb,card.querySelector(".opts"));}
+      const optsEl=card.querySelector(".opts");
+      built.opts.forEach((o,k)=>{const b=el(`<button class="opt">${o}</button>`);
+        b.onclick=()=>{if(card.dataset.done)return;card.dataset.done="1";const ok=k===built.ans;
+          Array.from(optsEl.children).forEach((c,ci)=>{if(ci===built.ans)c.classList.add("correct");else if(ci===k)c.classList.add("wrong");else c.classList.add("muted");});
+          const fb=card.querySelector("#fb");fb.classList.add("show",ok?"ok":"no");fb.innerHTML=ok?"✓ Correct!":`Answer: <b>${built.opts[built.ans]}</b>.`;
+          mark(q.ragam,ok);results.push({ragam:q.ragam,ok});
+          const nx=el(`<div class="bigbtns" style="margin-top:14px"><button class="btn gold" id="nx">${i+1>=pool.length?"Finish":"Next →"}</button></div>`);card.appendChild(nx);nx.querySelector("#nx").onclick=()=>{i++;step();};
+        };optsEl.appendChild(b);});
+      app.appendChild(card);
+    }else{ // open / self-rate
+      const card=el(`<div class="q-card"><div class="q-prompt">${q.prompt}</div>${q.sub?`<div class="q-sub">${q.sub}</div>`:""}
+         <div class="bigbtns">${q.revealSeq?`<button class="btn teal" id="hear">▶ Hear it</button>`:""}<button class="btn primary" id="rev">Reveal answer</button></div>
+         <div class="reveal" id="rv"></div>
+         <div class="selfrate hide" id="sr"><button class="sr-got" data-v="1">Got it</button><button class="sr-near" data-v="0.5">Nearly</button><button class="sr-miss" data-v="0">Missed</button></div>
+       </div>`);
+      app.appendChild(card);
+      if(q.revealSeq)card.querySelector("#hear").onclick=()=>playSeq(q.revealSeq,0.42);
+      card.querySelector("#rev").onclick=()=>{const rv=card.querySelector("#rv");rv.classList.add("show");
+        rv.innerHTML=q.revealHTML?q.revealHTML:`<span class="sw" style="font-size:1.2rem">${swPretty(q.revealSeq)}</span>`;
+        card.querySelector("#sr").classList.remove("hide");card.querySelector("#rev").classList.add("hide");};
+      card.querySelectorAll("#sr button").forEach(b=>b.onclick=()=>{const v=+b.dataset.v;const ok=v>=1;mark(q.ragam,ok);results.push({ragam:q.ragam,ok:v>=0.5});i++;step();});
+    }
+    app.querySelector("#bk").onclick=()=>{stopAll();tab="mock";document.querySelectorAll("nav.tabs button").forEach(x=>x.classList.toggle("on",x.dataset.tab==="mock"));render();};
+    window.scrollTo(0,0);
+  }
+  step();
+}
+function mockReport(app,results){
+  const total=results.length,ok=results.filter(r=>r.ok).length;
+  const byR={};results.forEach(r=>{if(!byR[r.ragam])byR[r.ragam]={a:0,c:0};byR[r.ragam].a++;if(r.ok)byR[r.ragam].c++;});
+  const weak=Object.keys(byR).filter(k=>byR[k].c/byR[k].a<0.6);
+  app.innerHTML="";
+  app.appendChild(el(`<button class="back" id="bk">‹ Mock exam menu</button>`));
+  app.appendChild(el(`<h2 class="view-h">Exam report</h2>`));
+  const nm=userName?esc(userName)+", ":"";
+  const msg=ok===total?(nm?nm+"flawless run — you're exam-ready.":"Flawless run. You're exam-ready."):ok>=total*0.7?(nm?nm+"really solid. Tidy up a couple and you're set.":"Really solid. Tidy up a couple and you're set."):"Good honest practice — now drill the weak ones below.";
+  const card=el(`<div class="q-card center"><div class="report-big">${ok}/${total}</div><p style="color:var(--ink-soft);font-size:1.05rem;margin-top:2px">${msg}</p></div>`);
+  app.appendChild(card);
+  if(weak.length){
+    const w=el(`<div class="panel"><div class="lbl">Worth another look</div><p style="margin:6px 0 12px">${weak.join(" · ")}</p><button class="btn gold" id="drill">Drill these now</button></div>`);
+    app.appendChild(w);
+    w.querySelector("#drill").onclick=()=>{const a=$("#app");a.innerHTML="";a.appendChild(el(`<button class="back" id="bk2">‹ Mock exam menu</button>`));startQuizFiltered(a,weak);a.querySelector("#bk2").onclick=()=>render();};
+  }else{
+    app.appendChild(el(`<div class="panel center"><p style="margin:0">Nothing flagged — lovely work. Try a fresh run to keep it sharp.</p></div>`));
+  }
+  const again=el(`<div class="bigbtns" style="justify-content:center;margin-top:14px"><button class="btn primary" id="again">New mock exam</button></div>`);
+  app.appendChild(again);
+  again.querySelector("#again").onclick=()=>render();
+  app.querySelector("#bk").onclick=()=>render();
+  window.scrollTo(0,0);
+}
+function startQuizFiltered(app,names){
+  const pool=buildPool(["pc","mela","type","parent","name","morph"]).filter(q=>names.includes(q.ragam));
+  startQuiz(app,shuffle(pool),"Weak-spot drill",Math.min(10,pool.length));
+}
+
+/* ============================ BOOT ============================ */
+document.getElementById("soundPill").onclick=turnSoundOn;
+document.getElementById("nameGo").onclick=()=>{
+  userName=document.getElementById("nameInput").value.trim();
+  saveName(userName);hideNameModal();applyName();
+};
+document.getElementById("nameInput").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("nameGo").click();});
+const whoEl=document.getElementById("whoLine");
+if(whoEl)whoEl.onclick=showNameModal;
+userName=loadName();
+applyName();
+if(!userName)showNameModal();
+render();
+</script>
+</body>
+</html>
